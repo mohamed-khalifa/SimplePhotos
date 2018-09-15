@@ -18,7 +18,7 @@ class FlickrDataSource(photos: MutableLiveData<List<PhotoUIModel>>, error: Mutab
         if (numberOfPages == null || currentPage <= numberOfPages) {
             executeRequest(ApiConnection.getRetrofitCall().create(ApiRetrofit::class.java).getPhotos(page = currentPage), photos, error, photoContainerUIModel)
         }else{
-            error.value ="no new items"
+         photos.value = photoContainerUIModel.photos
         }
 
     }
@@ -30,7 +30,7 @@ class FlickrDataSource(photos: MutableLiveData<List<PhotoUIModel>>, error: Mutab
             }
 
             override fun onResponse(call: Call<FlickrPhotosApiResponse>?, response: Response<FlickrPhotosApiResponse>?) {
-                if (response?.body() != null && response?.body()?.stat.equals("ok")) {
+                if (response?.body() != null && response.body()?.stat.equals("ok")) {
 
 
                     val flickrPhotosResponse = response.body()?.flickrApiPhotos

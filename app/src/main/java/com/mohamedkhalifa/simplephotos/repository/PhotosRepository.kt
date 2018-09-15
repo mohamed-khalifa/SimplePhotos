@@ -14,8 +14,8 @@ object PhotosRepository {
     fun getPhotos(photos: MutableLiveData<List<PhotoUIModel>>, error: MutableLiveData<String>, dataSource: Constants.DataSource, loadFromCache: Boolean) {
         val photoDataSource: PhotoDataSource
         if (dataSource == Constants.DataSource.FLICKR) {
-            if (loadFromCache && photos.value != null) {
-                photos.value = photos.value
+            if (loadFromCache && photoContainerUIModel.photos != null) {
+                photos.value = PhotoContainerUIModel.photos
             } else {
                 photoDataSource = FlickrDataSource(photos, error)
                 photoDataSource.getPhotos(photoContainerUIModel)
