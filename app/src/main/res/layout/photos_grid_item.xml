@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:strokeColor="@android:color/white"
+    app:strokeWidth="@dimen/photos_grid_stroke_width">
 
     <ImageView
         android:id="@+id/photoGridImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/grid_photo"/>
-</android.support.constraint.ConstraintLayout>
+        android:contentDescription="@string/grid_photo"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
+</android.support.design.card.MaterialCardView>
