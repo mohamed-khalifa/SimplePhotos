@@ -20,10 +20,18 @@ class PhotosGridAdapter(private val context: Context, private val photos: List<P
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        setItemWidthAndHeight(holder)
         val photoThumbnail = photos?.get(position)?.thumbnailUrl
         photoThumbnail?.let { photoThumbnailUrl ->
             PhotoLoader.loadPhoto(context, holder.photoGridImageView, photoThumbnailUrl)
         }
+    }
+
+    private fun setItemWidthAndHeight(holder: ViewHolder) {
+        val displayMetrics = context.resources.displayMetrics
+        val deviceWidth:Int = displayMetrics.widthPixels / 3
+        holder.itemView.layoutParams.width = deviceWidth
+        holder.itemView.layoutParams.height = deviceWidth
     }
 
     override fun getItemCount(): Int {

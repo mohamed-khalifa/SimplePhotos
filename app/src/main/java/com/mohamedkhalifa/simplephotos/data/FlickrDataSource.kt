@@ -2,10 +2,10 @@ package com.mohamedkhalifa.simplephotos.data
 
 import android.arch.lifecycle.MutableLiveData
 import com.learn.archwithkotlin.network.ApiConnection
-import com.learn.archwithkotlin.network.ApiRetrofit
 import com.mohamedkhalifa.simplephotos.model.FlickrPhotosApiResponse
 import com.mohamedkhalifa.simplephotos.model.PhotoContainerUIModel
 import com.mohamedkhalifa.simplephotos.model.PhotoUIModel
+import com.mohamedkhalifa.simplephotos.network.ApiRetrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
