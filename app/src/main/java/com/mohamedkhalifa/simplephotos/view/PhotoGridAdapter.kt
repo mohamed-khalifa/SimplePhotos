@@ -12,7 +12,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.photos_grid_item.*
 
 
-class PhotosGridAdapter(private val context: Context, private val photos: List<PhotoUIModel>?) : RecyclerView.Adapter<PhotosGridAdapter.ViewHolder>() {
+class PhotosGridAdapter(private val context: Context, private val photos: List<PhotoUIModel>?, private val photoGridSelectedListener: PhotosGridFragment.OnPhotoGridItemSelected?) : RecyclerView.Adapter<PhotosGridAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.photos_grid_item, parent, false)
         return ViewHolder(view)
@@ -24,6 +24,9 @@ class PhotosGridAdapter(private val context: Context, private val photos: List<P
         val photoThumbnail = photos?.get(position)?.thumbnailUrl
         photoThumbnail?.let { photoThumbnailUrl ->
             PhotoLoader.loadPhoto(context, holder.photoGridImageView, photoThumbnailUrl)
+        }
+        holder.containerView.setOnClickListener {
+            photoGridSelectedListener?.onPhotoGridItemSelected(position)
         }
     }
 

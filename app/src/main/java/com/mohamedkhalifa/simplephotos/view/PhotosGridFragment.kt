@@ -1,9 +1,7 @@
 package com.mohamedkhalifa.simplephotos.view
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,39 +15,32 @@ import com.mohamedkhalifa.simplephotos.viewmodel.PhotosViewModel
 import kotlinx.android.synthetic.main.fragment_photos_grid.*
 
 
-class PhotosGridFragment : Fragment() {
+class PhotosGridFragment : PhotosFragment() {
     private var isLoading = false
+    var photoGridSelectedListener: OnPhotoGridItemSelected? = null
+
+    companion object {
+        fun newInstance(): PhotosGridFragment {
+            val fragment = PhotosGridFragment()
+            return fragment
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_photos_grid, container, false)
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnPhotoGridItemSelected) photoGridSelectedListener = context
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(PhotosViewModel::class.java)
         val layoutManager = GridLayoutManager(context, 3)
         photosRecyclerView.layoutManager = layoutManager
         photosRecyclerView.itemAnimator = DefaultItemAnimator()
-        val photosObserver = Observer<List<PhotoUIModel>> { photos ->
-            if (photosRecyclerView.adapter == null) {
-                photosRecyclerView.adapter = this.context?.let { context ->
-                    PhotosGridAdapter(context, photos)
-                }
-            } else {
-                photosRecyclerView.adapter?.notifyDataSetChanged()
-            }
-            isLoading = false
-        }
-
-        val errorObserver = Observer<String> {
-            it?.let { errorMessage ->
-                Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-            }
-            isLoading = false
-        }
-        viewModel.initObservers()
-        viewModel.photos.observe(this, photosObserver)
-        viewModel.error.observe(this, errorObserver)
         photosPagination(viewModel, layoutManager)
     }
 
@@ -67,6 +58,26 @@ class PhotosGridFragment : Fragment() {
 
         })
         viewModel.getPhotosList(false)
+    }
+
+    override fun photosReceived(photos: List<PhotoUIModel>?) {
+        if (photosRecyclerView.adapter == null) {
+            photosRecyclerView.adapter = this.context?.let { context ->
+                PhotosGridAdapter(context, photos, photoGridSelectedListener)
+            }
+        } else {
+            photosRecyclerView.adapter?.notifyDataSetChanged()
+        }
+        isLoading = false
+    }
+
+    override fun errorOccurred(errorMessage: String) {
+        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
+        isLoading = false
+    }
+
+    interface OnPhotoGridItemSelected {
+        fun onPhotoGridItemSelected(selectedPhotoIndex: Int)
     }
 
 
