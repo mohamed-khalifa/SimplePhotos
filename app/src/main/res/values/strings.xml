@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SimplePhotos</string>
     <string name="grid_photo">Grid photo</string>
+    <string name="pager_photo">Pager photo</string>
 </resources>
